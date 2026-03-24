@@ -107,7 +107,8 @@ async def test_get_conversation_by_id_returns_none(tables):
 @pytest.mark.asyncio
 async def test_rate_response(tables):
     """rate_response should insert a rating row."""
-    import aiosqlite, database
+    import aiosqlite
+    import database
     conv_id = str(uuid4())
     msg_id = str(uuid4())
     rating_id = str(uuid4())
