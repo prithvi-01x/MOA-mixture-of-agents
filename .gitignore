@@ -1,0 +1,107 @@
+# ======================
+# Python / Backend
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+.env
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+*.spec
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# Ruff / Linting
+.ruff_cache/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# Jupyter
+.ipynb_checkpoints
+
+# ======================
+# Node / Frontend
+# ======================
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# pnpm
+pnpm-debug.log*
+
+# Vite
+frontend/.vite/
+
+# ======================
+# Environment / Secrets
+# ======================
+.env
+.env.local
+.env.*.local
+# Keep the example file
+!.env.example
+
+# ======================
+# Database / App data
+# ======================
+*.db
+*.sqlite
+*.sqlite3
+~/.moa/
+
+# ======================
+# Docker
+# ======================
+# Docker override files
+docker-compose.override.yml
+
+# ======================
+# IDE / Editors
+# ======================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ======================
+# OS
+# ======================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ======================
+# Logs
+# ======================
+*.log
+logs/
