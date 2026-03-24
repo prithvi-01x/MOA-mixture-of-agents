@@ -25,7 +25,8 @@ async def tables(tmp_db_path):
 @pytest.mark.asyncio
 async def test_create_tables(tables):
     """Tables should be created without error."""
-    import aiosqlite, database
+    import aiosqlite
+    import database
     async with aiosqlite.connect(database.DB_PATH) as db:
         cursor = await db.execute("SELECT name FROM sqlite_master WHERE type='table'")
         table_names = {row[0] for row in await cursor.fetchall()}
