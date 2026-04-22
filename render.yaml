@@ -16,14 +16,14 @@ services:
       - key: OPENROUTER_API_KEY
         sync: false
       - key: CORS_ORIGINS
-        value: https://moa-frontend.onrender.com
+        value: "*"
       - key: LOG_FORMAT
         value: json
 
   - type: web
     name: moa-frontend
     env: static
-    buildCommand: cd frontend && npm install && npm run build
+    buildCommand: cd frontend && pnpm install && pnpm build
     staticPublishPath: frontend/dist
     routes:
       - type: rewrite
@@ -31,4 +31,7 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://moa-backend.onrender.com
+        fromService:
+          type: web
+          name: moa-backend
+          property: host
