@@ -26,7 +26,6 @@ _cache_mtime: float = 0
 # Environment variables
 # ---------------------------------------------------------------------------
 
-OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 CONFIG_PATH: str = os.getenv("CONFIG_PATH", str(Path.home() / ".moa" / "config.json"))
 DB_PATH: str = os.getenv("DB_PATH", str(Path.home() / ".moa" / "moa.db"))
 
@@ -47,7 +46,7 @@ SSE_QUEUE_SIZE: int = int(os.getenv("SSE_QUEUE_SIZE", "100"))
 # ---------------------------------------------------------------------------
 
 _DEFAULT_CONFIG: dict = {
-    "keys": {"openrouter": "", "bytez": ""},
+    "keys": {"groq": "", "openrouter": ""},
     "default_pipeline": "parallel",
     "default_specialists": [],
     "default_chairman": {},
@@ -112,8 +111,15 @@ def get_key(provider: str) -> str | None:
     """
     Return the API key for *provider*, or None if it is empty / missing.
 
-    Checks the config file's ``keys`` section.
+    Checks the environment variables first, then the config file's ``keys`` section.
     """
+    # Try environment variable first (e.g. GROQ_API_KEY)
+    env_key = f"{provider.upper()}_API_KEY"
+    value = os.getenv(env_key)
+    if value:
+        return value
+
+    # Fallback to config file
     config = _read_config()
     keys: dict = config.get("keys", {})
     value = keys.get(provider)

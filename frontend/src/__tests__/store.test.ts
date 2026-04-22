@@ -5,10 +5,10 @@ describe('Zustand store', () => {
   beforeEach(() => {
     // Reset store to defaults before each test
     useStore.setState({
-      ollamaModels: [],
-      activeProvider: 'ollama',
+      groqModels: [],
+      activeProvider: 'groq',
       selectedSpecialists: [],
-      chairman: { model: '', provider: 'ollama' },
+      chairman: { model: '', provider: 'groq' },
       pipelineMode: 'parallel',
       apiKeys: {},
       conversations: [],
@@ -18,21 +18,21 @@ describe('Zustand store', () => {
       chairmanDone: false,
       isRunning: false,
       currentQuery: '',
-      health: { ollama: false, openrouter: false, bytez: false },
+      health: { groq: false, openrouter: false },
     });
   });
 
   // --- Setup actions ---
 
   it('toggleSpecialist adds a new specialist', () => {
-    const specialist = { model: 'llama3', provider: 'ollama' };
+    const specialist = { model: 'llama3', provider: 'groq' };
     useStore.getState().toggleSpecialist(specialist);
     expect(useStore.getState().selectedSpecialists).toHaveLength(1);
     expect(useStore.getState().selectedSpecialists[0].model).toBe('llama3');
   });
 
   it('toggleSpecialist removes an existing specialist', () => {
-    const specialist = { model: 'llama3', provider: 'ollama' };
+    const specialist = { model: 'llama3', provider: 'groq' };
     useStore.getState().toggleSpecialist(specialist);
     useStore.getState().toggleSpecialist(specialist);
     expect(useStore.getState().selectedSpecialists).toHaveLength(0);
@@ -58,7 +58,7 @@ describe('Zustand store', () => {
 
   it('startRun initialises chat state', () => {
     const specialists = [
-      { model: 'llama3', provider: 'ollama' },
+      { model: 'llama3', provider: 'groq' },
       { model: 'gpt-4', provider: 'openrouter' },
     ];
     useStore.getState().startRun('test query', specialists);
@@ -74,11 +74,11 @@ describe('Zustand store', () => {
 
   it('onSpecialistDone updates the correct specialist', () => {
     const specialists = [
-      { model: 'llama3', provider: 'ollama' },
+      { model: 'llama3', provider: 'groq' },
       { model: 'gpt-4', provider: 'openrouter' },
     ];
     useStore.getState().startRun('query', specialists);
-    useStore.getState().onSpecialistDone('llama3', 'ollama', 'Response text', 12.5, 300);
+    useStore.getState().onSpecialistDone('llama3', 'groq', 'Response text', 12.5, 300);
 
     const s = useStore.getState().specialists;
     const updated = s.find((x) => x.model === 'llama3');
@@ -105,7 +105,7 @@ describe('Zustand store', () => {
   });
 
   it('onChairmanDone finalises the run', () => {
-    useStore.getState().startRun('q', [{ model: 'x', provider: 'ollama' }]);
+    useStore.getState().startRun('q', [{ model: 'x', provider: 'groq' }]);
     useStore.getState().onChairmanToken('answer');
     useStore.getState().onChairmanDone();
     const state = useStore.getState();
@@ -116,7 +116,7 @@ describe('Zustand store', () => {
   });
 
   it('resetChat clears all chat state', () => {
-    useStore.getState().startRun('q', [{ model: 'x', provider: 'ollama' }]);
+    useStore.getState().startRun('q', [{ model: 'x', provider: 'groq' }]);
     useStore.getState().onChairmanToken('tok');
     useStore.getState().resetChat();
     const state = useStore.getState();
@@ -128,7 +128,7 @@ describe('Zustand store', () => {
   });
 
   it('onError stops the run', () => {
-    useStore.getState().startRun('q', [{ model: 'x', provider: 'ollama' }]);
+    useStore.getState().startRun('q', [{ model: 'x', provider: 'groq' }]);
     useStore.getState().onError('Something broke');
     expect(useStore.getState().isRunning).toBe(false);
   });

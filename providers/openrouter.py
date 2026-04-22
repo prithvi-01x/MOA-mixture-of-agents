@@ -111,7 +111,9 @@ class OpenRouterProvider(BaseProvider):
                 "/chat/completions",
                 json=payload,
             ) as response:
-                self._handle_http_error(response)
+                if response.status_code >= 400:
+                    await response.aread()
+                    self._handle_http_error(response)
 
                 async for line in response.aiter_lines():
                     if not line.startswith("data: "):
@@ -148,8 +150,16 @@ class OpenRouterProvider(BaseProvider):
     # ------------------------------------------------------------------
 
     async def list_models(self) -> list[str]:
-        """Return an empty list — OpenRouter users provide model names manually."""
-        return []
+        """Return popular OpenRouter free-tier models (April 2026)."""
+        return [
+            "nvidia/nemotron-3-super:free",
+            "google/gemma-4-26b-a4b-it:free",
+            "qwen/qwen3-coder-480b:free",
+            "meta-llama/llama-3.3-70b-instruct:free",
+            "mistralai/mistral-7b-instruct:free",
+            "microsoft/phi-3-medium-128k-instruct:free",
+            "openrouter/free",
+        ]
 
     # ------------------------------------------------------------------
     # Health check

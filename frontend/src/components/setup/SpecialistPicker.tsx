@@ -80,7 +80,7 @@ function SelectedSpecialistCard({
           fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-dim)',
           background: 'var(--bg-header)', padding: '2px 5px', letterSpacing: '0.06em',
         }}>
-          {provider === 'ollama' ? 'LOCAL' : 'CLOUD'}
+          CLOUD
         </span>
         {/* System prompt toggle */}
         <button
@@ -203,9 +203,8 @@ function SelectedSpecialistCard({
 
 // ── Unselected model row ─────────────────────────────────────────────────────
 
-function ModelRow({ model, provider, onToggle }: {
+function ModelRow({ model, onToggle }: {
   model: string;
-  provider: string;
   onToggle: () => void;
 }) {
   return (
@@ -229,38 +228,23 @@ function ModelRow({ model, provider, onToggle }: {
       </span>
       <span style={{
         fontFamily: 'var(--font-mono)', fontSize: 9,
-        color: provider === 'ollama' ? 'var(--text-dim)' : 'var(--accent-border)',
+        color: 'var(--accent-border)',
         background: 'var(--bg-header)', padding: '2px 5px', letterSpacing: '0.06em',
       }}>
-        {provider === 'ollama' ? 'LOCAL' : 'CLOUD'}
+        CLOUD
       </span>
     </div>
   );
 }
 
-// ── Cloud model presets ──────────────────────────────────────────────────────
-
-const CLOUD_MODELS: Record<string, string[]> = {
-  openrouter: [
-    'meta-llama/llama-3.1-70b-instruct',
-    'anthropic/claude-3-haiku',
-    'google/gemini-flash-1.5',
-    'mistralai/mistral-7b-instruct',
-  ],
-  bytez: [
-    'meta-llama/Llama-3.2-3B-Instruct',
-    'Qwen/Qwen2.5-7B-Instruct',
-  ],
-};
-
 // ── Main export ──────────────────────────────────────────────────────────────
 
 export default function SpecialistPicker() {
-  const { activeProvider, ollamaModels, selectedSpecialists, toggleSpecialist } = useStore();
+  const { activeProvider, groqModels, openrouterModels, selectedSpecialists, toggleSpecialist } = useStore();
 
-  const models = activeProvider === 'ollama'
-    ? ollamaModels.length > 0 ? ollamaModels : ['No Ollama models found']
-    : CLOUD_MODELS[activeProvider] ?? [];
+  const models = activeProvider === 'groq'
+    ? groqModels.length > 0 ? groqModels : ['No Groq models found']
+    : openrouterModels.length > 0 ? openrouterModels : ['No OpenRouter models found'];
 
   return (
     <div>
@@ -286,7 +270,7 @@ export default function SpecialistPicker() {
 
       {/* Unselected models */}
       {models.map((model) => {
-        const isDisabled = model === 'No Ollama models found';
+        const isDisabled = model === 'No Groq models found' || model === 'No OpenRouter models found';
         const isSelected = !isDisabled && selectedSpecialists.some(
           (s) => s.model === model && s.provider === activeProvider,
         );
@@ -295,7 +279,6 @@ export default function SpecialistPicker() {
           <ModelRow
             key={model}
             model={model}
-            provider={activeProvider}
             onToggle={() => {
               if (!isDisabled) {
                 toggleSpecialist({

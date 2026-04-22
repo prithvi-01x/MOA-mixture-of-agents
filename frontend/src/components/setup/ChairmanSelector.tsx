@@ -1,19 +1,15 @@
 import { useState } from 'react';
 import { useStore } from '../../store/app';
 
-const OLLAMA_MODELS = ['DOLPHIN3:8B', 'QWEN2.5-CODER:7B', 'MISTRAL:7B', 'GEMMA2:9B'];
-
 export default function ChairmanSelector() {
-  const { chairman, setChairman, ollamaModels } = useStore();
+  const { chairman, setChairman, groqModels, openrouterModels } = useStore();
   const [isCloud, setIsCloud] = useState(false);
   const models = isCloud
-    ? ['meta-llama/llama-3.1-70b-instruct', 'anthropic/claude-3-haiku', 'google/gemini-flash-1.5']
-    : ollamaModels.length > 0
-    ? ollamaModels
-    : OLLAMA_MODELS;
+    ? openrouterModels
+    : groqModels;
 
   const handleSelect = (model: string) => {
-    setChairman({ model, provider: isCloud ? 'openrouter' : 'ollama' });
+    setChairman({ model, provider: isCloud ? 'openrouter' : 'groq' });
   };
 
   return (
@@ -23,12 +19,12 @@ export default function ChairmanSelector() {
         <span style={{ fontFamily: 'var(--font-headline)', fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>
           CHAIRMAN MODEL
         </span>
-        {/* LOCAL/CLOUD toggle */}
+        {/* GROQ/CLOUD toggle */}
         <div style={{ marginLeft: 'auto', display: 'flex', border: '1px solid var(--border-mid)' }}>
-          {['LOCAL', 'CLOUD'].map((m) => (
+          {['GROQ', 'CLOUD'].map((m) => (
             <button
               key={m}
-              onClick={() => { setIsCloud(m === 'CLOUD'); setChairman({ model: '', provider: m === 'CLOUD' ? 'openrouter' : 'ollama' }); }}
+              onClick={() => { setIsCloud(m === 'CLOUD'); setChairman({ model: '', provider: m === 'CLOUD' ? 'openrouter' : 'groq' }); }}
               style={{
                 padding: '4px 10px',
                 background: (m === 'CLOUD') === isCloud ? 'var(--bg-header)' : 'transparent',

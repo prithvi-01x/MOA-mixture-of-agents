@@ -4,7 +4,6 @@ import ProviderTabs from '../components/setup/ProviderTabs';
 import SpecialistPicker from '../components/setup/SpecialistPicker';
 import ChairmanSelector from '../components/setup/ChairmanSelector';
 import PipelineModeSelector from '../components/setup/PipelineModeSelector';
-import APIKeyPanel from '../components/setup/APIKeyPanel';
 import { Terminal, Activity, Cpu } from 'lucide-react';
 
 export default function SetupPage() {
@@ -46,9 +45,6 @@ export default function SetupPage() {
         {/* RIGHT COLUMN */}
         <div style={{ flex: 1, padding: '24px', overflow: 'auto' }}>
           <PipelineModeSelector />
-          <div style={{ marginTop: 24 }}>
-            <APIKeyPanel />
-          </div>
 
           {/* Stats grid */}
           <div style={{ marginTop: 24 }}>

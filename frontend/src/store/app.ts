@@ -4,7 +4,7 @@ import type { SpecialistConfig, ChairmanConfig, Conversation } from '../lib/api'
 
 // --- Types ---
 
-export type Provider = 'ollama' | 'openrouter' | 'bytez';
+export type Provider = 'groq' | 'openrouter';
 export type PipelineMode = 'parallel' | 'serial' | 'debate';
 
 export interface SpecialistState {
@@ -20,7 +20,8 @@ export interface SpecialistState {
 
 export interface AppState {
   // Setup state
-  ollamaModels: string[];
+  groqModels: string[];
+  openrouterModels: string[];
   activeProvider: Provider;
   selectedSpecialists: SpecialistConfig[];
   chairman: ChairmanConfig;
@@ -38,19 +39,20 @@ export interface AppState {
   currentQuery: string;
 
   // Health
-  health: { ollama: boolean; openrouter: boolean; bytez: boolean };
+  health: { groq: boolean; openrouter: boolean };
 
   // Theme
   theme: 'dark' | 'light';
 
   // Actions
-  setOllamaModels: (models: string[]) => void;
+  setGroqModels: (models: string[]) => void;
+  setOpenRouterModels: (models: string[]) => void;
   setActiveProvider: (p: Provider) => void;
   toggleSpecialist: (config: SpecialistConfig) => void;
   setChairman: (c: ChairmanConfig) => void;
   setPipelineMode: (m: PipelineMode) => void;
   setApiKey: (provider: string, key: string) => void;
-  setHealth: (h: { ollama: boolean; openrouter: boolean; bytez: boolean }) => void;
+  setHealth: (h: { groq: boolean; openrouter: boolean }) => void;
   setConversations: (c: Conversation[]) => void;
   setCurrentQuery: (q: string) => void;
   setActiveConversationId: (id: string | null) => void;
@@ -72,10 +74,11 @@ export interface AppState {
 
 export const useStore = create<AppState>((set, get) => ({
   // Setup defaults
-  ollamaModels: [],
-  activeProvider: 'ollama',
+  groqModels: [],
+  openrouterModels: [],
+  activeProvider: 'groq',
   selectedSpecialists: [],
-  chairman: { model: '', provider: 'ollama' },
+  chairman: { model: '', provider: 'groq' },
   pipelineMode: 'parallel',
   apiKeys: {},
 
@@ -89,7 +92,7 @@ export const useStore = create<AppState>((set, get) => ({
   isRunning: false,
   currentQuery: '',
 
-  health: { ollama: false, openrouter: false, bytez: false },
+  health: { groq: false, openrouter: false },
 
   // Theme: read from localStorage, fall back to 'dark'
   theme: ((): 'dark' | 'light' => {
@@ -100,7 +103,8 @@ export const useStore = create<AppState>((set, get) => ({
   })(),
 
   // Setup actions
-  setOllamaModels: (models) => set({ ollamaModels: models }),
+  setGroqModels: (models) => set({ groqModels: models }),
+  setOpenRouterModels: (models) => set({ openrouterModels: models }),
   setActiveProvider: (p) => set({ activeProvider: p }),
 
   toggleSpecialist: (config) => {

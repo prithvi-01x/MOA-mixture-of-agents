@@ -1,9 +1,8 @@
 import { useStore, type Provider } from '../../store/app';
 
 const PROVIDERS: { id: Provider; label: string }[] = [
-  { id: 'ollama', label: 'OLLAMA' },
+  { id: 'groq', label: 'GROQ' },
   { id: 'openrouter', label: 'OPENROUTER' },
-  { id: 'bytez', label: 'BYTEZ' },
 ];
 
 export default function ProviderTabs() {
@@ -23,7 +22,7 @@ export default function ProviderTabs() {
               padding: '8px 12px',
               background: isActive ? 'var(--accent-dim)' : 'transparent',
               border: `1px solid ${isActive ? 'var(--accent)' : 'var(--border)'}`,
-              borderLeft: id !== 'ollama' ? 'none' : undefined,
+              borderLeft: id !== 'groq' ? 'none' : undefined,
               color: isActive ? 'var(--accent)' : 'var(--text-dim)',
               fontFamily: 'var(--font-mono)',
               fontSize: 10,

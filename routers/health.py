@@ -11,7 +11,7 @@ router = APIRouter(tags=["health"])
 
 @router.get("/health")
 async def health_check():
-    """Return reachability status for Ollama, OpenRouter, and Bytez."""
+    """Return reachability status for Groq and OpenRouter."""
 
     async def _check(provider_name: str) -> bool:
         try:
@@ -20,15 +20,13 @@ async def health_check():
         except Exception:
             return False
 
-    ollama, openrouter, bytez = await asyncio.gather(
-        _check("ollama"),
+    groq, openrouter = await asyncio.gather(
+        _check("groq"),
         _check("openrouter"),
-        _check("bytez"),
         return_exceptions=True,
     )
 
     return {
-        "ollama": ollama if isinstance(ollama, bool) else False,
+        "groq": groq if isinstance(groq, bool) else False,
         "openrouter": openrouter if isinstance(openrouter, bool) else False,
-        "bytez": bytez if isinstance(bytez, bool) else False,
     }

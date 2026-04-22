@@ -9,9 +9,8 @@ import { MemoryRouter } from 'react-router-dom';
 vi.mock('../components/setup/ProviderTabs', () => ({
   default: () => (
     <div>
-      <button data-testid="tab-ollama">Ollama</button>
+      <button data-testid="tab-groq">Groq</button>
       <button data-testid="tab-openrouter">OpenRouter</button>
-      <button data-testid="tab-bytez">Bytez</button>
     </div>
   ),
 }));
@@ -28,10 +27,6 @@ vi.mock('../components/setup/PipelineModeSelector', () => ({
   default: () => <div data-testid="pipeline-selector" />,
 }));
 
-vi.mock('../components/setup/APIKeyPanel', () => ({
-  default: () => <div data-testid="api-key-panel" />,
-}));
-
 vi.mock('react-router-dom', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-router-dom')>();
   return { ...actual, useNavigate: () => vi.fn() };
@@ -39,9 +34,9 @@ vi.mock('react-router-dom', async (importOriginal) => {
 
 const makeStore = (overrides = {}) => ({
   selectedSpecialists: [],
-  chairman: { model: '', provider: 'ollama' },
-  ollamaModels: [],
-  activeProvider: 'ollama',
+  chairman: { model: '', provider: 'groq' },
+  groqModels: [],
+  activeProvider: 'groq',
   toggleSpecialist: vi.fn(),
   ...overrides,
 });
@@ -60,9 +55,8 @@ describe('SetupPage', () => {
 
   it('renders provider tab buttons', () => {
     render(<MemoryRouter><SetupPage /></MemoryRouter>);
-    expect(screen.getByTestId('tab-ollama')).toBeTruthy();
+    expect(screen.getByTestId('tab-groq')).toBeTruthy();
     expect(screen.getByTestId('tab-openrouter')).toBeTruthy();
-    expect(screen.getByTestId('tab-bytez')).toBeTruthy();
   });
 
   it('renders SpecialistPicker', () => {

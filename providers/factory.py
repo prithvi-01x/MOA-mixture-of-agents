@@ -8,9 +8,8 @@ inside each provider is reused across requests (connection pooling).
 
 from config import get_key
 from providers.base import BaseProvider
-from providers.ollama import OllamaProvider
+from providers.groq import GroqProvider
 from providers.openrouter import OpenRouterProvider
-from providers.bytez import BytezProvider
 
 # Module-level cache keyed by provider name.
 # Referenced by main.py lifespan to close clients on shutdown.
@@ -26,7 +25,7 @@ def get_provider(provider_name: str) -> BaseProvider:
     ``httpx.AsyncClient`` inside each provider to pool connections.
 
     Args:
-        provider_name: One of ``"ollama"``, ``"openrouter"``, or ``"bytez"``.
+        provider_name: One of ``"groq"``, or ``"openrouter"``.
 
     Returns:
         A ready-to-use ``BaseProvider`` instance.
@@ -37,16 +36,13 @@ def get_provider(provider_name: str) -> BaseProvider:
     if provider_name in _provider_cache:
         return _provider_cache[provider_name]
 
-    if provider_name == "ollama":
-        provider: BaseProvider = OllamaProvider()
+    if provider_name == "groq":
+        key = get_key("groq")
+        provider: BaseProvider = GroqProvider(api_key=key)
 
     elif provider_name == "openrouter":
         key = get_key("openrouter")
         provider = OpenRouterProvider(api_key=key)
-
-    elif provider_name == "bytez":
-        key = get_key("bytez")
-        provider = BytezProvider(api_key=key)
 
     else:
         raise ValueError(f"Unknown provider: {provider_name}")

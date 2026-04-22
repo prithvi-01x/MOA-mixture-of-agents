@@ -4,11 +4,10 @@ import type { SpecialistState } from '../../store/app';
 
 function ProviderBadge({ provider }: { provider: string }) {
   const colors: Record<string, { bg: string; color: string }> = {
-    ollama: { bg: 'rgba(120,120,120,0.15)', color: '#9a9a9a' },
+    groq: { bg: 'rgba(245,158,11,0.1)', color: '#f59e0b' },
     openrouter: { bg: 'rgba(59,130,246,0.1)', color: '#60a5fa' },
-    bytez: { bg: 'rgba(168,85,247,0.1)', color: '#c084fc' },
   };
-  const style = colors[provider] ?? colors.ollama;
+  const style = colors[provider] ?? colors.groq;
 
   return (
     <span style={{

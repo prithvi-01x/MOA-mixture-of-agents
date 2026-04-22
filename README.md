@@ -21,7 +21,7 @@
 
 ## Overview
 
-MOA (Mixture of Agents) lets you configure multiple AI specialists — each from different providers (Ollama, OpenRouter, Bytez) or with different system prompts — and pits them against the same query simultaneously. A chairman model then reads all responses and synthesises the single best answer.
+MOA (Mixture of Agents) lets you configure multiple AI specialists — each from different providers (Groq and OpenRouter) or with different system prompts — and pits them against the same query simultaneously. A chairman model then reads all responses and synthesises the single best answer.
 
 **Pipeline modes:**
 | Mode | Description |
@@ -40,7 +40,7 @@ Browser (React/Vite)
     │  Server-Sent Events (SSE)
     ▼
 FastAPI Backend
-    ├── MoAPipeline  →  Specialist 1 (Ollama)
+    ├── MoAPipeline  →  Specialist 1 (Groq)
     │                →  Specialist 2 (OpenRouter)
     │                →  Specialist N …
     │
@@ -58,7 +58,7 @@ FastAPI Backend
 | Database | SQLite via aiosqlite (persistent conversation history) |
 | HTTP | httpx (connection pool + retry with exponential backoff) |
 | Logging | loguru (JSON or human-readable, in-memory ring buffer) |
-| Container | Docker Compose (backend + nginx frontend + optional Ollama) |
+| Container | Docker Compose (backend + nginx frontend + optional Groq) |
 
 ---
 
@@ -74,7 +74,7 @@ FastAPI Backend
 - **Conversation export** — download as Markdown or JSON, copy to clipboard
 - **Structured logging** — loguru JSON logs; `GET /api/logs` endpoint (when `DEBUG=true`)
 - **Toast notifications** — real-time error feedback via react-hot-toast
-- **Docker Compose** — production-ready with nginx reverse proxy and optional Ollama service
+- **Docker Compose** — production-ready with nginx reverse proxy and optional Groq service
 
 ---
 
@@ -83,7 +83,7 @@ FastAPI Backend
 ### Prerequisites
 - Python 3.11+
 - Node 20+ and pnpm (`npm install -g pnpm`)
-- [Ollama](https://ollama.ai) running locally (or an OpenRouter / Bytez API key)
+- [Groq](https://groq.ai) running locally (or an OpenRouter API key)
 
 ### 1. Clone & set up the backend
 
@@ -136,7 +136,7 @@ DB_PATH=~/.moa/moa.db
 CONFIG_PATH=~/.moa/config.json
 
 # ── Providers ─────────────────────────────────────────────
-OLLAMA_BASE_URL=http://localhost:11434
+GROQ_API_KEY=http://localhost:11434
 
 # ── Frontend ──────────────────────────────────────────────
 VITE_API_URL=http://localhost:8000
@@ -174,13 +174,13 @@ docker compose up -d
 - Frontend → `http://localhost` (port 80, nginx)
 - Backend → `http://localhost:8000`
 
-### With local Ollama
+### With local Groq
 
 ```bash
 docker compose --profile local up -d
 ```
 
-This also starts the `ollama/ollama:latest` container on port 11434 with a named volume for models.
+This also starts the `groq/groq:latest` container on port 11434 with a named volume for models.
 
 ### Services
 
@@ -188,7 +188,7 @@ This also starts the `ollama/ollama:latest` container on port 11434 with a named
 |---------|-------|------|
 | `backend` | `Dockerfile.backend` (python:3.12-slim + gunicorn) | 8000 |
 | `frontend` | `Dockerfile.frontend` (node:20-slim build → nginx:alpine) | 80 |
-| `ollama` | `ollama/ollama:latest` (profile: `local`) | 11434 |
+| `groq` | `groq/groq:latest` (profile: `local`) | 11434 |
 
 > The nginx config proxies `/api/*` to the backend and serves the React SPA with fallback routing.
 
@@ -203,7 +203,7 @@ This also starts the `ollama/ollama:latest` container on port 11434 with a named
 | `GET` | `/api/conversations` | List all conversations |
 | `GET` | `/api/conversations/{id}` | Get conversation with messages |
 | `GET` | `/api/conversations/{id}/export?format=markdown\|json` | Export conversation |
-| `GET` | `/api/models/ollama` | List local Ollama models |
+| `GET` | `/api/models/groq` | List local Groq models |
 | `GET` | `/api/keys` | List configured provider keys |
 | `POST` | `/api/keys` | Set a provider API key |
 | `GET` | `/api/logs?n=50` | Last N log lines (`DEBUG=true` only) |
@@ -306,15 +306,14 @@ MOA/
 ├── providers/
 │   ├── base.py              # BaseProvider ABC + SpecialistResult
 │   ├── factory.py           # get_provider() + connection-pool cache
-│   ├── ollama.py            # Ollama streaming provider
+│   ├── groq.py            # Groq streaming provider
 │   ├── openrouter.py        # OpenRouter streaming provider
-│   ├── bytez.py             # Bytez streaming provider
 │   └── retry.py             # Exponential backoff decorators
 │
 ├── routers/
 │   ├── chat.py              # POST /api/chat (SSE), GET /api/conversations
 │   ├── export.py            # GET /api/conversations/{id}/export
-│   ├── models.py            # GET /api/models/ollama
+│   ├── models.py            # GET /api/models/groq
 │   ├── keys.py              # GET/POST /api/keys
 │   ├── health.py            # GET /api/health
 │   └── logs.py              # GET /api/logs (DEBUG only)

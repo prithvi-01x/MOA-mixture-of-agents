@@ -1,7 +1,7 @@
 """
 Abstract base provider and shared data structures for the MOA provider layer.
 
-All concrete providers (OpenRouter, Bytez, Ollama, etc.) must subclass
+All concrete providers (Groq, OpenRouter, etc.) must subclass
 ``BaseProvider`` and implement its abstract methods.
 """
 

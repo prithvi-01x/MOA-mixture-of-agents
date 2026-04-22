@@ -17,7 +17,7 @@ vi.mock('../store/app', () => ({
 
 const makeState = (overrides: Partial<SpecialistState> = {}): SpecialistState => ({
   model: 'llama3.2',
-  provider: 'ollama',
+  provider: 'groq',
   content: 'Hello **world**',
   isStreaming: false,
   isDone: true,
@@ -30,7 +30,7 @@ describe('SpecialistCard', () => {
   it('renders model name and provider', () => {
     render(<SpecialistCard specialist={makeState()} />);
     expect(screen.getByText(/llama3.2/i)).toBeTruthy();
-    expect(screen.getByText(/ollama/i)).toBeTruthy();
+    expect(screen.getByText(/groq/i)).toBeTruthy();
   });
 
   it('shows streaming indicator when isStreaming is true', () => {

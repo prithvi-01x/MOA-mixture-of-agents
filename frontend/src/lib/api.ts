@@ -3,12 +3,15 @@ const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 // --- Types ---
 
 export interface HealthStatus {
-  ollama: boolean;
+  groq: boolean;
   openrouter: boolean;
-  bytez: boolean;
 }
 
-export interface OllamaModelsResponse {
+export interface GroqModelsResponse {
+  models: string[];
+}
+
+export interface OpenRouterModelsResponse {
   models: string[];
 }
 
@@ -72,7 +75,9 @@ async function post<T>(path: string, body: unknown): Promise<T> {
 export const api = {
   health: (): Promise<HealthStatus> => get('/api/health'),
 
-  ollamaModels: (): Promise<OllamaModelsResponse> => get('/api/ollama/models'),
+  groqModels: (): Promise<GroqModelsResponse> => get('/api/groq/models'),
+
+  openrouterModels: (): Promise<OpenRouterModelsResponse> => get('/api/openrouter/models'),
 
   setKey: (provider: string, key: string): Promise<{ success: boolean }> =>
     post('/api/keys', { provider, key }),

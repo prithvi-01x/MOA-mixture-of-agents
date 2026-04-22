@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { MessageSquare, Settings, Clock, Wrench, Plus, Menu, X } from 'lucide-react';
+import { MessageSquare, Wrench, Plus, Menu, X } from 'lucide-react';
 import { useStore } from '../store/app';
 import { api } from '../lib/api';
 
 const NAV = [
   { to: '/setup', label: 'WORKBENCH', icon: Wrench },
   { to: '/chat', label: 'AGENTS', icon: MessageSquare },
-  { to: '/history', label: 'HISTORY', icon: Clock },
-  { to: '/config', label: 'CONFIG', icon: Settings },
 ];
 
 export default function AppLayout() {
   const {
     conversations, health, activeConversationId,
-    setHealth, setConversations, setOllamaModels,
+    setHealth, setConversations, setGroqModels, setOpenRouterModels,
     setActiveConversationId, newChat,
     theme, toggleTheme,
   } = useStore();
@@ -24,9 +22,10 @@ export default function AppLayout() {
 
   useEffect(() => {
     api.health().then(setHealth).catch(() => {});
-    api.ollamaModels().then((r) => setOllamaModels(r.models)).catch(() => {});
+    api.groqModels().then((r) => setGroqModels(r.models)).catch(() => {});
+    api.openrouterModels().then((r) => setOpenRouterModels(r.models)).catch(() => {});
     api.conversations().then(setConversations).catch(() => {});
-  }, [setHealth, setOllamaModels, setConversations]);
+  }, [setHealth, setGroqModels, setOpenRouterModels, setConversations]);
 
   const onSetup = location.pathname === '/setup' || location.pathname === '/';
 
@@ -177,7 +176,7 @@ export default function AppLayout() {
       {/* Health + Footer */}
       <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
         <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-          {(['ollama', 'openrouter', 'bytez'] as const).map((p) => (
+          {(['groq', 'openrouter'] as const).map((p) => (
             <div key={p} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
               <div style={{
                 width: 5, height: 5,

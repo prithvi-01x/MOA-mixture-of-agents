@@ -79,7 +79,7 @@ async def test_get_conversation_by_id_with_specialists(tables):
         id=sr_id,
         message_id=msg_id,
         model="llama3",
-        provider="ollama",
+        provider="groq",
         content="Specialist reply",
         tokens_per_sec=12.5,
         latency_ms=300,
