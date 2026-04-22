@@ -16,7 +16,7 @@ _CHAIRMAN_SYSTEM_PROMPT = (
     "model said what."
 )
 
-_MAX_CONTENT_CHARS = 1024 * 4  # ~1024 tokens
+_MAX_CONTENT_CHARS = 1024 * 10  # ~10240 tokens
 
 
 class ChairmanAggregator:
