@@ -1,0 +1,15 @@
+name: Keep Backend Alive
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Runs every 10 minutes
+  workflow_dispatch:      # Allows manual triggering for testing
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping MoA Backend
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" https://moa-backend-x410.onrender.com/api/health
+          echo "Backend pinged successfully at $(date)"
