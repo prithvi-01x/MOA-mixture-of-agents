@@ -2,7 +2,6 @@ services:
   - type: web
     name: moa-backend
     env: python
-    plan: free
     buildCommand: pip install -r requirements.txt && pip install gunicorn
     startCommand: gunicorn main:app -w 2 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
     healthCheckPath: /api/health
@@ -23,7 +22,6 @@ services:
   - type: web
     name: moa-frontend
     env: static
-    plan: free
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     routes:
