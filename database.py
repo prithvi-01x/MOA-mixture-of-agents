@@ -8,7 +8,6 @@ DB path is read from the DB_PATH environment variable (default: ~/.moa/moa.db).
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
-from uuid import uuid4
 
 import aiosqlite
 

@@ -1,8 +1,6 @@
 """Tests for config.py — config read/write, key management, and caching."""
 
 import importlib
-import json
-import os
 from pathlib import Path
 
 import pytest
@@ -58,10 +56,10 @@ def test_config_caching(tmp_config_path):
     assert cfg1 is cfg2
 
 
-def test_cache_invalidation_on_write(tmp_config_path):
+def test_cache_invalidation(tmp_path, monkeypatch):
     """Writing invalidates the cache so the next read returns fresh data."""
     import config
-    cfg1 = config.get_config()
+    config.get_config()
     config.set_config("default_pipeline", "debate")
     cfg2 = config.get_config()
     assert cfg2["default_pipeline"] == "debate"

@@ -89,7 +89,6 @@ class MoAPipeline:
 
         for specialist in specialists:
             # Build messages: history + query + previous specialist output (if any)
-            messages = self._build_messages(query, history, previous_content)
             result = await self._run_specialist(
                 specialist, query, on_token=on_token, history=history,
                 extra_context=previous_content,

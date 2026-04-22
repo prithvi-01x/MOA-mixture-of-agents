@@ -25,7 +25,7 @@ def _build_markdown(conv: dict) -> str:
 
         if role == "user":
             lines.append("---")
-            lines.append(f"\n## 🧑 User\n")
+            lines.append("\n## 🧑 User\n")
             lines.append(msg.get("content", ""))
             lines.append("")
 
